@@ -179,9 +179,11 @@ const CustomerListPage = () => {
                                                     <Link
                                                         to={`/payment/${inv._id}`}
                                                         title="Manage Payment"
-                                                        className="text-purple-400 hover:text-purple-600 transition"
+                                                        className="group-hover:scale-110 transition-transform"
                                                     >
-                                                        <Wand2 size={16} />
+                                                        <div className="w-8 h-8 rounded-full border border-green-200 bg-green-50 flex items-center justify-center text-green-600 font-bold text-xs shadow-sm hover:bg-green-100 transition-colors">
+                                                            Rs
+                                                        </div>
                                                     </Link>
                                                     <Link
                                                         to={`/customer-summary/${encodeURIComponent(inv.mobileNumber)}`}
@@ -255,7 +257,7 @@ const CustomerListPage = () => {
                     &copy; 2023 Business Manager System. All rights reserved.
                 </footer>
             </div>
-        </div>
+        </div >
     );
 };
 

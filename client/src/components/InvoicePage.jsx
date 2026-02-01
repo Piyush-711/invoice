@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import { Plus, Trash2, Save, Users, Scan, ShoppingBag } from 'lucide-react';
+import { Plus, Trash2, Save, Users, Scan, ShoppingBag, ArrowLeft, Printer, FileText, Calendar } from 'lucide-react';
 import ScannerModal from './ScannerModal';
 import API_BASE_URL from '../config';
 
@@ -198,25 +198,23 @@ const InvoicePage = () => {
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col items-center invoice-wrapper">
             {/* Navigation Header */}
-            <header className="w-full bg-white shadow-sm border-b border-gray-200 px-8 py-4 flex justify-between items-center print-hidden sticky top-0 z-50">
-                <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">S</div>
-                    <span className="text-xl font-bold text-gray-800 tracking-tight">Shri Ambika Sales</span>
+            <header className="w-full bg-white shadow-sm border-b border-gray-200 px-6 py-4 flex justify-between items-center print-hidden sticky top-0 z-50">
+                <div className="flex items-center gap-4">
+                    <Link to="/" className="text-gray-500 hover:text-gray-700 transition-colors">
+                        <ArrowLeft size={20} />
+                    </Link>
+                    <h1 className="text-xl font-bold text-gray-800">New Invoice</h1>
                 </div>
-                <Link
-                    to="/customers"
-                    className="flex items-center gap-2 bg-gray-900 text-white px-5 py-2.5 rounded-lg hover:bg-gray-800 transition-all shadow-md active:scale-95"
-                >
-                    <Users size={18} />
-                    <span className="font-medium">View All Customers</span>
-                </Link>
-                <Link
-                    to="/add-product"
-                    className="flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-lg hover:bg-green-700 transition-all shadow-md active:scale-95 ml-2"
-                >
-                    <ShoppingBag size={18} />
-                    <span className="font-medium">Add Product</span>
-                </Link>
+                <div className="flex gap-3">
+                    <Link
+                        to="/customers"
+                        className="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-all shadow-sm active:scale-95 font-medium text-sm"
+                    >
+                        <Users size={16} />
+                        View All Customers
+                    </Link>
+
+                </div>
             </header>
 
             {/* A4 Container Wrapper */}
@@ -320,54 +318,57 @@ const InvoicePage = () => {
 
                         {/* Items Table */}
                         <div className="mb-4 flex-grow">
-                            <table className="w-full border-collapse border border-blue-900 text-sm">
-                                <thead className="bg-blue-900 text-white">
+                            <table className="w-full border-collapse text-sm">
+                                <thead className="bg-[#005f73] text-white">
                                     <tr>
-                                        <th className="border border-blue-800 py-2 px-1 w-10">S.No</th>
-                                        <th className="border border-blue-800 py-2 px-2 text-left">Description</th>
-                                        <th className="border border-blue-800 py-2 px-1 w-12">Qty</th>
-                                        <th className="border border-blue-800 py-2 px-1 w-16">HSN</th>
-                                        <th className="border border-blue-800 py-2 px-2 text-right w-20">Rate</th>
-                                        <th className="border border-blue-800 py-2 px-2 text-right w-24">Amount</th>
+                                        <th className="py-2 px-3 text-center w-12 font-bold text-xs uppercase tracking-wider">S.No</th>
+                                        <th className="py-2 px-3 text-left font-bold text-xs uppercase tracking-wider">Description of Goods</th>
+                                        <th className="py-2 px-3 text-center w-20 font-bold text-xs uppercase tracking-wider">HSN</th>
+                                        <th className="py-2 px-3 text-center w-16 font-bold text-xs uppercase tracking-wider">Qty</th>
+                                        <th className="py-2 px-3 text-right w-24 font-bold text-xs uppercase tracking-wider">Rate</th>
+                                        <th className="py-2 px-3 text-right w-28 font-bold text-xs uppercase tracking-wider">Amount</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {fields.map((item, index) => (
-                                        <tr key={item.id} className="border-b border-gray-200">
-                                            <td className="border-r border-gray-300 p-2 text-center bg-gray-50">{index + 1}</td>
-                                            <td className="border-r border-gray-300 p-2">
+                                        <tr key={item.id} className="border-b border-gray-100 last:border-b-2 last:border-[#005f73]">
+                                            <td className="p-3 text-center text-gray-400 text-xs font-semibold bg-gray-50/50">{index + 1}</td>
+                                            <td className="p-2">
                                                 <textarea
                                                     {...register(`items.${index}.description`)}
-                                                    className="w-full h-16 resize-none focus:outline-none bg-transparent"
+                                                    className="w-full h-10 resize-none focus:outline-none bg-transparent text-gray-800 placeholder-gray-300 font-medium leading-tight pt-2"
                                                     placeholder="Item Description"
                                                 />
                                             </td>
-                                            <td className="border-r border-gray-300 p-2 text-center">
+                                            <td className="p-2 text-center">
+                                                <input
+                                                    {...register(`items.${index}.hsnCode`)}
+                                                    className="w-full text-center focus:outline-none bg-transparent text-gray-600 font-mono text-xs"
+                                                    placeholder="-"
+                                                />
+                                            </td>
+                                            <td className="p-2 text-center">
                                                 <input
                                                     type="number"
                                                     {...register(`items.${index}.qty`)}
-                                                    className="w-full text-center focus:outline-none bg-transparent"
+                                                    className="w-full text-center focus:outline-none bg-transparent font-bold text-gray-800"
                                                 />
                                             </td>
-                                            <td className="border-r border-gray-300 p-2 text-center">
-                                                <input
-                                                    {...register(`items.${index}.hsnCode`)}
-                                                    className="w-full text-center focus:outline-none bg-transparent"
-                                                />
-                                            </td>
-                                            <td className="border-r border-gray-300 p-2 text-right">
+                                            <td className="p-2 text-right">
                                                 <input
                                                     type="number"
                                                     step="0.01"
                                                     {...register(`items.${index}.unitPrice`)}
-                                                    className="w-full text-right focus:outline-none bg-transparent"
+                                                    className="w-full text-right focus:outline-none bg-transparent font-medium text-gray-800"
                                                 />
                                             </td>
-                                            <td className="p-2 text-right font-semibold">
+                                            <td className="p-2 text-right font-bold text-gray-900 group relative">
                                                 ₹{((watch(`items.${index}.qty`) || 0) * (watch(`items.${index}.unitPrice`) || 0)).toFixed(2)}
-                                            </td>
-                                            <td className="p-1 print-hidden w-6 text-center">
-                                                <button type="button" onClick={() => remove(index)} className="text-red-500 hover:text-red-700">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => remove(index)}
+                                                    className="absolute -right-6 top-1/2 -translate-y-1/2 text-red-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all print-hidden p-2"
+                                                >
                                                     <Trash2 size={14} />
                                                 </button>
                                             </td>
@@ -375,103 +376,130 @@ const InvoicePage = () => {
                                     ))}
                                 </tbody>
                             </table>
-                            <div className="flex gap-2 mt-2 print-hidden">
-                                <button type="button" onClick={() => append({ description: '', qty: 1, unitPrice: 0 })} className="flex items-center gap-1 text-blue-600 text-sm font-semibold hover:text-blue-800">
-                                    <Plus size={16} /> Add Item
+                            <div className="flex gap-4 mt-3 print-hidden">
+                                <button type="button" onClick={() => append({ description: '', qty: 1, unitPrice: 0 })} className="flex items-center gap-1.5 text-[#0284c7] text-sm font-bold hover:text-blue-800 transition-colors">
+                                    <div className="bg-[#0284c7] text-white rounded-full p-0.5"><Plus size={12} /></div> Add Item
                                 </button>
-                                <button type="button" onClick={() => setShowScanner(true)} className="flex items-center gap-1 text-purple-600 text-sm font-semibold hover:text-purple-800">
+                                <button type="button" onClick={() => setShowScanner(true)} className="flex items-center gap-1.5 text-purple-600 text-sm font-bold hover:text-purple-800 transition-colors">
                                     <Scan size={16} /> Scan Barcode / QR
                                 </button>
                             </div>
                         </div>
 
-                        {/* Totals Section */}
-                        <div className="flex justify-end mb-6">
-                            <div className="w-1/2">
-                                {/* IGST Toggle */}
-                                <div className="mb-2 print-hidden flex justify-end items-center gap-2">
-                                    <input
-                                        type="checkbox"
-                                        id="igstToggle"
-                                        checked={isIGST}
-                                        onChange={(e) => setIsIGST(e.target.checked)}
-                                        className="w-4 h-4 cursor-pointer"
-                                    />
-                                    <label htmlFor="igstToggle" className="text-sm font-semibold cursor-pointer select-none">Enable IGST (18%)</label>
-                                </div>
+                        {/* Bank & Totals Section */}
+                        <div className="flex justify-between items-start mt-auto pt-6 border-t border-gray-200 gap-8 h-[300px]">
+                            {/* Left: Bank Details & Terms */}
+                            <div className="w-1/2 text-xs text-gray-600 space-y-4">
+                                <div>
+                                    <h4 className="font-bold text-gray-500 uppercase mb-2 tracking-wide text-[10px]">Bank Details</h4>
+                                    <div className="grid grid-cols-[80px_1fr] gap-y-1">
+                                        <span className="font-medium text-gray-500">Bank Name:</span>
+                                        <span className="font-bold text-gray-800">Bank of Baroda</span>
 
-                                <div className="flex justify-between py-1 border-b border-gray-200">
-                                    <span className="text-gray-600">Total Amount Before Tax:</span>
-                                    <span className="font-semibold">₹{subTotal.toFixed(2)}</span>
-                                </div>
+                                        <span className="font-medium text-gray-500">A/C No:</span>
+                                        <span className="font-bold text-gray-800">24412000006709</span>
 
-                                {!isIGST && (
-                                    <>
-                                        <div className="flex justify-between py-1 border-b border-gray-200">
-                                            <span className="text-gray-600">SGST @ 9%:</span>
-                                            <span className="font-semibold">₹{sgst.toFixed(2)}</span>
-                                        </div>
-                                        <div className="flex justify-between py-1 border-b border-gray-200">
-                                            <span className="text-gray-600">CGST @ 9%:</span>
-                                            <span className="font-semibold">₹{cgst.toFixed(2)}</span>
-                                        </div>
-                                    </>
-                                )}
-                                {isIGST && (
-                                    <div className="flex justify-between py-1 border-b border-gray-200">
-                                        <span className="text-gray-600">IGST @ 18%:</span>
-                                        <span className="font-semibold">₹{igst.toFixed(2)}</span>
+                                        <span className="font-medium text-gray-500">IFSC:</span>
+                                        <span className="font-bold text-gray-800">BARB0DEVS1K</span>
                                     </div>
-                                )}
-
-                                <div className="flex justify-between py-1 border-b border-blue-900 bg-gray-100 font-bold text-gray-800">
-                                    <span className="pl-2">Total Tax Amount:</span>
-                                    <span>₹{totalTax.toFixed(2)}</span>
                                 </div>
-                                <div className="flex justify-between py-2 border-b-2 border-blue-900 text-xl font-bold text-blue-900 bg-blue-50">
-                                    <span className="pl-2">Total Amount After Tax:</span>
-                                    <span>₹{grandTotal.toFixed(2)}</span>
-                                </div>
-                            </div>
-                        </div>
 
-                        {/* Footer */}
-                        <div className="flex justify-between items-end mt-auto pt-4 border-t border-gray-200">
-                            <div className="text-sm text-gray-700 w-1/2">
-                                <h4 className="font-bold mb-2">Payment Details</h4>
-                                <p><span className="font-semibold">Bank Name:</span> Bank of Baroda</p>
-                                <p><span className="font-semibold">A/C No:</span> 24412000006709</p>
-                                <p><span className="font-semibold">IFSC Code:</span> BARBODE VSIK</p>
-
-                                <div className="mt-4">
-                                    <p className="font-bold">Terms: <span className="font-normal">Net 30 days</span></p>
-                                    <p className="text-xs mt-1 text-gray-500">Thank you for your business! Please remit payment by due date.</p>
+                                <div>
+                                    <h4 className="font-bold text-gray-500 uppercase mb-2 tracking-wide text-[10px]">Terms & Conditions</h4>
+                                    <ol className="list-decimal pl-3 space-y-0.5 text-[10px]">
+                                        <li>Goods once sold will not be taken back.</li>
+                                        <li>Interest @ 18% p.a. will be charged if payment is not made within due date.</li>
+                                        <li>Subject to Sikar Jurisdiction only.</li>
+                                    </ol>
                                 </div>
                             </div>
-                            <div className="w-1/3 text-center">
-                                <p className="font-bold text-lg mb-8">For, Shri Ambika Sales</p>
-                                <div className="h-10 border-b border-gray-400 w-3/4 mx-auto mb-2 relative">
-                                    <div className="absolute bottom-1 left-0 right-0 text-blue-900 font-handwriting italic text-xl">Authorized Signature</div>
+
+                            {/* Right: Totals & Signature */}
+                            <div className="w-1/2 flex flex-col justify-between h-full">
+                                <div>
+                                    {/* IGST Toggle */}
+                                    <div className="mb-3 print-hidden flex justify-end items-center gap-2">
+                                        <div className="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                                            <input type="checkbox" name="toggle" id="igstToggle" checked={isIGST} onChange={(e) => setIsIGST(e.target.checked)} className="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300 checked:right-0 checked:border-[#0284c7]" style={{ right: isIGST ? '0' : 'auto', left: isIGST ? 'auto' : '0' }} />
+                                            <label htmlFor="igstToggle" className={`toggle-label block overflow-hidden h-5 rounded-full cursor-pointer ${isIGST ? 'bg-[#0284c7]' : 'bg-gray-300'}`}></label>
+                                        </div>
+                                        <label htmlFor="igstToggle" className="text-xs font-semibold cursor-pointer text-gray-500">Enable IGST (18%)</label>
+                                    </div>
+
+                                    <div className="space-y-2 text-sm">
+                                        <div className="flex justify-between text-gray-600">
+                                            <span>Total Amount Before Tax:</span>
+                                            <span className="font-bold text-gray-800">₹{subTotal.toFixed(2)}</span>
+                                        </div>
+
+                                        {!isIGST ? (
+                                            <>
+                                                <div className="flex justify-between text-gray-600">
+                                                    <span>CGST @ 9%:</span>
+                                                    <span className="font-medium">₹{cgst.toFixed(2)}</span>
+                                                </div>
+                                                <div className="flex justify-between text-gray-600">
+                                                    <span>SGST @ 9%:</span>
+                                                    <span className="font-medium">₹{sgst.toFixed(2)}</span>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <div className="flex justify-between text-gray-600">
+                                                <span>IGST @ 18%:</span>
+                                                <span className="font-medium">₹{igst.toFixed(2)}</span>
+                                            </div>
+                                        )}
+
+                                        <div className="flex justify-between pt-2 border-t border-gray-200">
+                                            <span className="font-bold text-gray-600">Total Tax Amount:</span>
+                                            <span className="font-bold text-gray-800">₹{totalTax.toFixed(2)}</span>
+                                        </div>
+
+                                        <div className="flex justify-between items-center py-2 mt-2 border-t border-blue-900 border-b-2">
+                                            <span className="text-sm font-bold text-[#0284c7] uppercase">Total Amount After Tax:</span>
+                                            <span className="text-xl font-extrabold text-[#0284c7]">₹{grandTotal.toFixed(2)}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <p className="text-xs text-gray-500">Authorized Signature</p>
+
+                                <div className="text-center mt-6">
+                                    <p className="font-bold text-xs text-gray-800 mb-8">For, Shri Ambika Sales</p>
+                                    <div className="h-px bg-gray-300 w-3/4 mx-auto mb-1"></div>
+                                    <p className="text-[10px] text-[#0284c7] italic font-medium">Authorized Signature</p>
+                                </div>
                             </div>
-                        </div>
-
-                        {/* Floating Action Buttons */}
-                        <div className="fixed bottom-8 right-8 flex gap-4 print-hidden">
-
-                            <button
-                                type="submit"
-                                className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors font-bold"
-                            >
-                                <Save size={20} /> Save & Print
-                            </button>
                         </div>
 
                     </form>
                 </div>
+            </div>
 
-                <style>{`
+            {/* Bottom Action Bar */}
+            <div className="w-full bg-white border-t border-gray-200 p-4 sticky bottom-0 z-40 print-hidden">
+                <div className="max-w-7xl mx-auto flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm text-gray-500">Status:</span>
+                        <span className="text-sm font-bold text-orange-500">Draft</span>
+                    </div>
+
+                    <div className="flex gap-3">
+                        <button
+                            type="button"
+                            className="px-6 py-2 bg-gray-100 text-gray-700 font-bold rounded-lg hover:bg-gray-200 transition-colors text-sm"
+                        >
+                            Save Draft
+                        </button>
+                        <button
+                            onClick={handleSubmit(onSubmit)}
+                            className="flex items-center gap-2 px-6 py-2 bg-[#0284c7] text-white font-bold rounded-lg hover:bg-[#0369a1] transition-colors shadow-sm text-sm"
+                        >
+                            <Printer size={16} /> Save & Print
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <style>{`
                 @media print {
                     @page {
                         size: A4;
@@ -510,7 +538,6 @@ const InvoicePage = () => {
                     }
                 }
             `}</style>
-            </div>
             {showScanner && (
                 <ScannerModal
                     onClose={() => setShowScanner(false)}

@@ -26,33 +26,29 @@ const PaymentSummaryCard = ({ mobileNumber, customerName }) => {
     if (!summary) return null;
 
     return (
-        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 mb-8 transform transition hover:shadow-xl">
-            <h3 className="text-xl font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2">
-                <span className="w-2 h-6 bg-blue-600 rounded-full"></span>
-                Payment Summary for {customerName || mobileNumber}
+        <div className="mb-8">
+            <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                <span className="w-1.5 h-8 bg-blue-600 rounded-full"></span>
+                Payment Summary for <span className="text-blue-600">{customerName || 'Customer'}</span>
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Total Sales */}
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                    <p className="text-blue-600 text-sm font-semibold uppercase tracking-wider mb-1">Total Sales Amount</p>
-                    <p className="text-2xl font-bold text-blue-900">₹{summary.totalSales.toFixed(2)}</p>
+                <div className="bg-white p-6 rounded-xl border border-blue-100 shadow-sm">
+                    <p className="text-blue-600 text-xs font-bold uppercase tracking-wider mb-2">Total Sales Amount</p>
+                    <p className="text-3xl font-bold text-gray-900">₹{summary.totalSales.toFixed(2)}</p>
                 </div>
 
                 {/* Total Paid */}
-                <div className="bg-green-50 p-4 rounded-lg border border-green-100">
-                    <p className="text-green-600 text-sm font-semibold uppercase tracking-wider mb-1">Total Paid Amount</p>
-                    <p className="text-2xl font-bold text-green-900">₹{summary.totalPaid.toFixed(2)}</p>
+                <div className="bg-white p-6 rounded-xl border border-green-100 shadow-sm">
+                    <p className="text-green-600 text-xs font-bold uppercase tracking-wider mb-2">Total Paid Amount</p>
+                    <p className="text-3xl font-bold text-gray-900">₹{summary.totalPaid.toFixed(2)}</p>
                 </div>
 
                 {/* Total Pending */}
-                <div className={`p-4 rounded-lg border ${summary.totalPending > 0 ? 'bg-red-50 border-red-100' : 'bg-gray-50 border-gray-200'}`}>
-                    <p className={`${summary.totalPending > 0 ? 'text-red-600' : 'text-gray-600'} text-sm font-semibold uppercase tracking-wider mb-1`}>
-                        Total Pending / Left
-                    </p>
-                    <p className={`text-2xl font-bold ${summary.totalPending > 0 ? 'text-red-700' : 'text-gray-700'}`}>
-                        ₹{summary.totalPending.toFixed(2)}
-                    </p>
+                <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                    <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Total Pending / Left</p>
+                    <p className="text-3xl font-bold text-gray-900">₹{summary.totalPending.toFixed(2)}</p>
                 </div>
             </div>
         </div>

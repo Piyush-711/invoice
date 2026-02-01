@@ -45,7 +45,9 @@ router.post('/', async (req, res) => {
             barcode,
             qrCode,
             taxRate,
-            unit
+            unit,
+            quantity: req.body.quantity,
+            reorderLevel: req.body.reorderLevel
         });
 
         const savedProduct = await newProduct.save();

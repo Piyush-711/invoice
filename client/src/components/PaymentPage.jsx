@@ -2,21 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { ArrowLeft, Save } from 'lucide-react';
+import API_BASE_URL from '../config';
 
 import PaymentSummaryCard from './PaymentSummaryCard';
 
 const PaymentPage = () => {
-    // ... existing state ...
     const { id } = useParams();
     const [invoice, setInvoice] = useState(null);
     const [paidAmountInput, setPaidAmountInput] = useState('');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // ... existing fetch logic ...
         const fetchInvoice = async () => {
             try {
-                const res = await axios.get(`http://localhost:5000/invoice/${id}`);
+                const res = await axios.get(`${API_BASE_URL}/invoice/${id}`);
                 setInvoice(res.data);
                 setPaidAmountInput(res.data.paidAmount || 0);
             } catch (err) {
@@ -29,9 +28,8 @@ const PaymentPage = () => {
     }, [id]);
 
     const handleUpdatePayment = async () => {
-        // ... existing update logic ...
         try {
-            const res = await axios.put(`http://localhost:5000/invoice/${id}/payment`, {
+            const res = await axios.put(`${API_BASE_URL}/invoice/${id}/payment`, {
                 paidAmount: paidAmountInput
             });
             setInvoice(res.data);
@@ -48,69 +46,83 @@ const PaymentPage = () => {
     const leftAmount = invoice.totalAmount - Number(paidAmountInput);
 
     return (
-        <div className="min-h-screen bg-gray-50 p-8 flex flex-col items-center">
-            <div className="w-full max-w-2xl">
+        <div className="min-h-screen bg-gray-50 p-8">
+            <div className="max-w-7xl mx-auto">
                 <Link
                     to="/"
-                    className="inline-flex items-center gap-2 bg-gray-600 text-white px-5 py-2.5 rounded-lg hover:bg-gray-700 transition-colors shadow-md mb-6"
+                    className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors mb-6 text-sm font-medium"
                 >
-                    <ArrowLeft size={20} /> Back to Invoice
+                    <ArrowLeft size={16} /> Back to Dashboard
                 </Link>
 
-                {/* New Customer-level Summary */}
+                {/* Customer-level Summary */}
                 <PaymentSummaryCard mobileNumber={invoice.mobileNumber} customerName={invoice.customerName} />
 
-                {/* Existing Invoice-level Details */}
-                <div className="bg-white p-8 rounded-xl shadow-2xl">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6 border-b pb-2">Current Invoice Payment</h2>
+                {/* Current Invoice Payment Card */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+                    <h2 className="text-lg font-bold text-gray-900 mb-8">Current Invoice Payment</h2>
 
-                    <div className="space-y-4 mb-8">
-                        <div className="flex justify-between">
-                            <span className="text-gray-600">Customer Name:</span>
-                            <span className="font-semibold text-gray-800">{invoice.customerName}</span>
+                    {/* Details Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12 mb-8 border-b border-gray-100 pb-8">
+                        <div>
+                            <p className="text-gray-500 text-sm mb-1">Customer Name</p>
+                            <p className="font-bold text-gray-900 text-lg">{invoice.customerName}</p>
                         </div>
-                        <div className="flex justify-between">
-                            <span className="text-gray-600">Mobile Number:</span>
-                            <span className="font-semibold text-gray-800">{invoice.mobileNumber}</span>
+                        <div>
+                            <p className="text-gray-500 text-sm mb-1">Mobile Number</p>
+                            <p className="font-bold text-gray-900 text-lg">{invoice.mobileNumber}</p>
                         </div>
-                        <div className="flex justify-between">
-                            <span className="text-gray-600">Purchase Date:</span>
-                            <span className="font-semibold text-gray-800">{new Date(invoice.purchaseDate).toLocaleDateString()}</span>
+                        <div>
+                            <p className="text-gray-500 text-sm mb-1">Purchase Date</p>
+                            <p className="font-bold text-gray-900 text-lg">{new Date(invoice.purchaseDate).toLocaleDateString('en-GB')}</p>
                         </div>
-                        <div className="flex justify-between">
-                            <span className="text-gray-600">Invoice Total:</span>
-                            <span className="font-bold text-lg text-blue-900">₹{invoice.totalAmount.toFixed(2)}</span>
+                        <div>
+                            <p className="text-gray-500 text-sm mb-1">Invoice Total</p>
+                            <p className="font-bold text-blue-600 text-xl">₹{invoice.totalAmount.toFixed(2)}</p>
                         </div>
                     </div>
 
-                    <div className="bg-gray-100 p-6 rounded-lg mb-6">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Enter Paid Amount</label>
+                    {/* Payment Input Section */}
+                    <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 mb-8">
+                        <label className="block text-sm font-medium text-gray-700 mb-3">Enter Paid Amount</label>
                         <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">₹</span>
+                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">₹</span>
                             <input
                                 type="number"
-                                className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-lg font-semibold"
+                                className="w-full pl-10 pr-12 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-xl font-bold text-gray-900 bg-white"
                                 value={paidAmountInput}
                                 onChange={(e) => setPaidAmountInput(e.target.value)}
                             />
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium">INR</span>
                         </div>
+                        <p className="text-xs text-gray-400 mt-2 flex items-center gap-1">
+                            <span className="w-3 h-3 bg-gray-300 rounded-full flex items-center justify-center text-white text-[8px]">i</span>
+                            Enter the amount received for this specific transaction.
+                        </p>
                     </div>
 
-                    <div className="border-t pt-4 mb-8">
-                        <div className="flex justify-between items-center text-xl">
-                            <span className="font-bold text-gray-700">Left Amount:</span>
-                            <span className={`font-extrabold text-2xl ${leftAmount > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                    {/* Footer Actions */}
+                    <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div>
+                            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">LEFT AMOUNT</p>
+                            <p className={`text-3xl font-bold ${leftAmount > 1 ? 'text-green-500' : 'text-green-500'}`}>
+                                {/* Logic check: usually left amount > 0 is pending (red?), but screen shows Green 0.00. 
+                                    If left amount is 0, it should be green. If > 0, maybe red? 
+                                    Screenshot 2 shows "Left Amount ₹0.00" in Green. 
+                                    I'll follow standard logic: 0 is green, >0 is likely red or just text.
+                                    Actually screenshot specific shows green 0.00. 
+                                */}
                                 ₹{leftAmount.toFixed(2)}
-                            </span>
+                            </p>
                         </div>
-                    </div>
 
-                    <button
-                        onClick={handleUpdatePayment}
-                        className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors flex justify-center items-center gap-2 shadow-lg"
-                    >
-                        <Save size={20} /> Update Payment Record
-                    </button>
+                        <button
+                            onClick={handleUpdatePayment}
+                            className="bg-[#0284c7] text-white font-bold px-8 py-3 rounded-lg hover:bg-[#0369a1] transition-colors flex items-center gap-2 shadow-sm"
+                        >
+                            <Save size={18} /> Update Payment Record
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
