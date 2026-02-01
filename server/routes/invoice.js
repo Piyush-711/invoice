@@ -72,6 +72,25 @@ router.get('/next-number', async (req, res) => {
 
 
 
+// PUT /invoice/:id - Update invoice details (Customer Name, Mobile)
+router.put('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { customerName, mobileNumber } = req.body;
+
+        const invoice = await Invoice.findById(id);
+        if (!invoice) return res.status(404).json({ message: 'Invoice not found' });
+
+        if (customerName) invoice.customerName = customerName;
+        if (mobileNumber) invoice.mobileNumber = mobileNumber;
+
+        const updatedInvoice = await invoice.save();
+        res.json(updatedInvoice);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // PUT /invoice/:id/payment - Update paid & left amount
 router.put('/:id/payment', async (req, res) => {
     try {

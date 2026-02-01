@@ -12,6 +12,13 @@ const CustomerListPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
 
+    // Modal State
+    const [selectedInvoice, setSelectedInvoice] = useState(null);
+    const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    const [paymentAmount, setPaymentAmount] = useState('');
+    const [editFormData, setEditFormData] = useState({ customerName: '', mobileNumber: '', status: 'Due' });
+
     useEffect(() => {
         const fetchInvoices = async () => {
             try {
@@ -44,6 +51,67 @@ const CustomerListPage = () => {
 
     const getStatus = (invoice) => {
         return invoice.leftAmount <= 0 ? 'Paid' : 'Due';
+    };
+
+    const openPaymentModal = (invoice) => {
+        setSelectedInvoice(invoice);
+        setPaymentAmount('');
+        setPaymentModalOpen(true);
+    };
+
+    const openEditModal = (invoice) => {
+        setSelectedInvoice(invoice);
+        setEditFormData({
+            customerName: invoice.customerName,
+            mobileNumber: invoice.mobileNumber,
+            status: getStatus(invoice)
+        });
+        setEditModalOpen(true);
+    };
+
+    const handleUpdatePayment = async () => {
+        if (!paymentAmount || isNaN(paymentAmount) || Number(paymentAmount) < 0) {
+            alert("Please enter a valid amount");
+            return;
+        }
+        try {
+            const currentPaid = Number(selectedInvoice.paidAmount) || 0;
+            const additional = Number(paymentAmount);
+            const newTotalPaid = currentPaid + additional;
+
+            await axios.put(`${API_BASE_URL}/invoice/${selectedInvoice._id}/payment`, {
+                paidAmount: newTotalPaid
+            });
+
+            // Update local state
+            setInvoices(prev => prev.map(inv => inv._id === selectedInvoice._id ? {
+                ...inv,
+                paidAmount: newTotalPaid,
+                leftAmount: inv.totalAmount - newTotalPaid
+            } : inv));
+
+            setPaymentModalOpen(false);
+        } catch (err) {
+            console.error("Payment update failed", err);
+            alert("Failed to update payment");
+        }
+    };
+
+    const handleUpdateInvoice = async () => {
+        try {
+            const res = await axios.put(`${API_BASE_URL}/invoice/${selectedInvoice._id}`, {
+                customerName: editFormData.customerName,
+                mobileNumber: editFormData.mobileNumber
+            });
+
+            // Update local state
+            setInvoices(prev => prev.map(inv => inv._id === selectedInvoice._id ? { ...inv, ...res.data } : inv));
+
+            setEditModalOpen(false);
+        } catch (err) {
+            console.error("Invoice update failed", err);
+            alert("Failed to update invoice");
+        }
     };
 
     const filteredInvoices = invoices.filter(inv => {
@@ -176,15 +244,15 @@ const CustomerListPage = () => {
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center justify-center gap-3 opacity-100 group-hover:opacity-100 transition-opacity">
-                                                    <Link
-                                                        to={`/payment/${inv._id}`}
+                                                    <button
+                                                        onClick={() => openPaymentModal(inv)}
                                                         title="Manage Payment"
                                                         className="group-hover:scale-110 transition-transform"
                                                     >
                                                         <div className="w-8 h-8 rounded-full border border-green-200 bg-green-50 flex items-center justify-center text-green-600 font-bold text-xs shadow-sm hover:bg-green-100 transition-colors">
                                                             Rs
                                                         </div>
-                                                    </Link>
+                                                    </button>
                                                     <Link
                                                         to={`/customer-summary/${encodeURIComponent(inv.mobileNumber)}`}
                                                         title="History"
@@ -192,13 +260,13 @@ const CustomerListPage = () => {
                                                     >
                                                         <History size={16} />
                                                     </Link>
-                                                    <Link
-                                                        to={`/payment/${inv._id}`}
+                                                    <button
+                                                        onClick={() => openEditModal(inv)}
                                                         title="Edit"
                                                         className="text-gray-400 hover:text-gray-600 transition"
                                                     >
                                                         <Edit size={16} />
-                                                    </Link>
+                                                    </button>
                                                     <button
                                                         onClick={() => handleDelete(inv._id)}
                                                         title="Delete"
@@ -257,6 +325,124 @@ const CustomerListPage = () => {
                     &copy; 2023 Business Manager System. All rights reserved.
                 </footer>
             </div>
+
+            {/* Record Payment Modal */}
+            {paymentModalOpen && selectedInvoice && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setPaymentModalOpen(false)}></div>
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg z-10 overflow-hidden transform transition-all">
+                        <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+                            <div>
+                                <h3 className="font-bold text-lg text-gray-900">Record Payment</h3>
+                                <p className="text-sm text-gray-500">INV-2023-{selectedInvoice.invoiceNo.toString().padStart(4, '0')} • {selectedInvoice.customerName}</p>
+                            </div>
+                            <button onClick={() => setPaymentModalOpen(false)} className="text-gray-400 hover:text-gray-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </button>
+                        </div>
+
+                        <div className="p-6">
+                            <div className="grid grid-cols-3 gap-4 mb-6">
+                                <div className="border border-blue-100 bg-blue-50 rounded-lg p-3 text-center">
+                                    <p className="text-xs font-bold text-blue-500 uppercase">Total</p>
+                                    <p className="text-lg font-bold text-gray-900">₹{selectedInvoice.totalAmount.toLocaleString()}</p>
+                                </div>
+                                <div className="border border-green-100 bg-green-50 rounded-lg p-3 text-center">
+                                    <p className="text-xs font-bold text-green-600 uppercase">Paid</p>
+                                    <p className="text-lg font-bold text-green-700">₹{selectedInvoice.paidAmount.toLocaleString()}</p>
+                                </div>
+                                <div className="border border-red-100 bg-red-50 rounded-lg p-3 text-center">
+                                    <p className="text-xs font-bold text-red-500 uppercase">Due</p>
+                                    <p className="text-lg font-bold text-red-600">₹{selectedInvoice.leftAmount.toLocaleString()}</p>
+                                </div>
+                            </div>
+
+                            <div className="mb-6">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">New Amount Received (₹)</label>
+                                <div className="relative">
+                                    <input
+                                        type="number"
+                                        value={paymentAmount}
+                                        onChange={(e) => setPaymentAmount(e.target.value)}
+                                        className="w-full text-lg font-bold border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none placeholder-gray-300"
+                                        placeholder="0.00"
+                                    />
+                                    <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 font-bold text-xs uppercase">INR</span>
+                                </div>
+                                <div className="mt-2 text-right">
+                                    <span className="text-xs text-gray-500">New Balance after payment: </span>
+                                    <span className="font-bold text-gray-900">
+                                        ₹{Math.max(0, selectedInvoice.leftAmount - (Number(paymentAmount) || 0)).toLocaleString()}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={handleUpdatePayment}
+                                className="w-full bg-[#0284c7] hover:bg-[#0369a1] text-white font-bold py-3 rounded-lg shadow-md transition-all flex items-center justify-center gap-2"
+                            >
+                                <div className="bg-white rounded-full p-0.5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0284c7" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                                Update Payment
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Edit Invoice Details Modal */}
+            {editModalOpen && selectedInvoice && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setEditModalOpen(false)}></div>
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-md z-10 overflow-hidden transform transition-all">
+                        <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+                            <h3 className="font-bold text-lg text-gray-900">Edit Invoice Details</h3>
+                            <button onClick={() => setEditModalOpen(false)} className="text-gray-400 hover:text-gray-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </button>
+                        </div>
+
+                        <div className="p-6 space-y-4">
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-1">Customer Name</label>
+                                <input
+                                    type="text"
+                                    value={editFormData.customerName}
+                                    onChange={(e) => setEditFormData({ ...editFormData, customerName: e.target.value })}
+                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-800"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-1">Mobile Number</label>
+                                <input
+                                    type="text"
+                                    value={editFormData.mobileNumber}
+                                    onChange={(e) => setEditFormData({ ...editFormData, mobileNumber: e.target.value })}
+                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-800"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-1">Status</label>
+                                <select
+                                    value={editFormData.status}
+                                    onChange={(e) => setEditFormData({ ...editFormData, status: e.target.value })}
+                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-800 bg-white"
+                                >
+                                    <option value="Due">Due</option>
+                                    <option value="Paid">Paid</option>
+                                </select>
+                            </div>
+
+                            <button
+                                onClick={handleUpdateInvoice}
+                                className="w-full bg-[#0284c7] hover:bg-[#0369a1] text-white font-bold py-3 rounded-lg shadow-md transition-all flex items-center justify-center gap-2 mt-4"
+                            >
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div >
     );
 };
