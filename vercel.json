@@ -15,16 +15,23 @@
     ],
     "routes": [
         {
-            "src": "/invoice/(.*)",
+            "src": "/invoice(.*)",
             "dest": "/server/server.js"
         },
         {
-            "src": "/products/(.*)",
+            "src": "/products(.*)",
             "dest": "/server/server.js"
         },
         {
             "src": "/(.*)",
             "dest": "/client/$1"
+        },
+        {
+            "handle": "filesystem"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/client/index.html"
         }
     ]
 }
