@@ -1,4 +1,4 @@
-// Use environment variable for API URL, fallback to localhost for local dev
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+// Use relative path for API to support both Vercel (same domain) and Local (via Vite proxy)
+const API_BASE_URL = '';
 
 export default API_BASE_URL;

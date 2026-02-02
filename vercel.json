@@ -15,7 +15,11 @@
     ],
     "routes": [
         {
-            "src": "/api/(.*)",
+            "src": "/invoice/(.*)",
+            "dest": "/server/server.js"
+        },
+        {
+            "src": "/products/(.*)",
             "dest": "/server/server.js"
         },
         {

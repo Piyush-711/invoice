@@ -11,7 +11,8 @@ export default defineConfig({
             '.trycloudflare.com'
         ],
         proxy: {
-            '/invoice': 'http://localhost:5000'
+            '/invoice': 'http://localhost:5000',
+            '/products': 'http://localhost:5000'
         }
     }
 })
