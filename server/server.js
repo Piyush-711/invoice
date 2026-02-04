@@ -16,6 +16,10 @@ app.use(bodyParser.json());
 // Database Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/invoice-app';
 
+if (!process.env.MONGODB_URI && process.env.NODE_ENV === 'production') {
+    console.warn("WARNING: MONGODB_URI is not set! Using fallback localhost connection which will likely fail in production.");
+}
+
 mongoose.connect(MONGODB_URI)
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.error('MongoDB Connection Error:', err));

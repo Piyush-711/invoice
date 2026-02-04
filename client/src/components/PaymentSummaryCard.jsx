@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../config';
 
 const PaymentSummaryCard = ({ mobileNumber, customerName }) => {
     const [summary, setSummary] = useState(null);
@@ -10,7 +11,7 @@ const PaymentSummaryCard = ({ mobileNumber, customerName }) => {
             if (!mobileNumber) return;
             try {
                 const encodedMobile = encodeURIComponent(mobileNumber);
-                const res = await axios.get(`http://localhost:5000/invoice/customer-summary?mobileNumber=${encodedMobile}`);
+                const res = await axios.get(`${API_BASE_URL}/invoice/customer-summary?mobileNumber=${encodedMobile}`);
                 setSummary(res.data);
             } catch (err) {
                 console.error("Failed to fetch payment summary", err);
