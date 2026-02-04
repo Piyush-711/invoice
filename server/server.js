@@ -25,11 +25,21 @@ mongoose.connect(MONGODB_URI)
     .catch(err => console.error('MongoDB Connection Error:', err));
 
 // Routes
+// Serve static files from the React client
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
+// API Routes
 app.use('/invoice', invoiceRoutes);
 app.use('/products', require('./routes/product'));
 
-app.get('/', (req, res) => {
+app.get('/api/health', (req, res) => {
     res.send('Invoice API is running');
+});
+
+// Handle React routing, return all requests to React app
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
 });
 
 // Start Server only if not running in Vercel (lambda environment)

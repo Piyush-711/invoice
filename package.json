@@ -1,0 +1,14 @@
+{
+    "name": "invoice-app-root",
+    "version": "1.0.0",
+    "description": "Root package to orchestrate client and server for deployment",
+    "scripts": {
+        "postinstall": "npm install --prefix client && npm install --prefix server",
+        "build": "npm run build --prefix client",
+        "start": "node server/server.js"
+    },
+    "engines": {
+        "node": ">=16.0.0"
+    },
+    "dependencies": {}
+}
