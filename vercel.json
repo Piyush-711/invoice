@@ -23,7 +23,39 @@
             "dest": "/server/server.js"
         },
         {
+            "src": "^/api(/(.*))?$",
+            "dest": "/server/server.js"
+        },
+        {
             "handle": "filesystem"
+        },
+        {
+            "src": "^/invoices(.*)$",
+            "dest": "/index.html"
+        },
+        {
+            "src": "^/customers(.*)$",
+            "dest": "/index.html"
+        },
+        {
+            "src": "^/payment(.*)$",
+            "dest": "/index.html"
+        },
+        {
+            "src": "^/summary(.*)$",
+            "dest": "/index.html"
+        },
+        {
+            "src": "^/add-product(.*)$",
+            "dest": "/index.html"
+        },
+        {
+            "src": "^/low-stock(.*)$",
+            "dest": "/index.html"
+        },
+        {
+            "src": "^/customer-summary(.*)$",
+            "dest": "/index.html"
         },
         {
             "src": "^/.*$",
