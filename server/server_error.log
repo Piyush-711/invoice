@@ -1,0 +1,7 @@
+[2026-02-22T08:47:00.530Z] [INVOICE] Error in POST /: Invoice validation failed: items.0.description: Path `description` is required.
+Stack: ValidationError: Invoice validation failed: items.0.description: Path `description` is required.
+    at Document.invalidate (C:\Users\DELL\Downloads\invoice\invoice-app\server\node_modules\mongoose\lib\document.js:3221:32)
+    at Subdocument.invalidate (C:\Users\DELL\Downloads\invoice\invoice-app\server\node_modules\mongoose\lib\types\subdocument.js:229:12)
+    at C:\Users\DELL\Downloads\invoice\invoice-app\server\node_modules\mongoose\lib\document.js:3014:17
+    at C:\Users\DELL\Downloads\invoice\invoice-app\server\node_modules\mongoose\lib\schematype.js:1368:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)

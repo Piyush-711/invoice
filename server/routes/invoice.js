@@ -1,6 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const Invoice = require('../models/Invoice');
+const fs = require('fs');
+const path = require('path');
+
+const logFile = path.join(__dirname, '../server_error.log');
+const logError = (context, err) => {
+    try {
+        const timestamp = new Date().toISOString();
+        const msg = `[${timestamp}] [INVOICE] Error in ${context}: ${err.message}\nStack: ${err.stack}\n`;
+        fs.appendFileSync(logFile, msg);
+    } catch (e) {
+        // Fallback
+    }
+};
 
 // POST /invoice - Save invoice
 router.post('/', async (req, res) => {
@@ -35,6 +48,7 @@ router.post('/', async (req, res) => {
         res.status(201).json(savedInvoice);
     } catch (err) {
         console.error('Error saving invoice:', err);
+        logError('POST /', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -48,6 +62,7 @@ router.get('/', async (req, res) => {
         res.json(invoices);
     } catch (err) {
         console.error('Error fetching invoices:', err);
+        logError('GET /', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -64,6 +79,7 @@ router.get('/next-number', async (req, res) => {
         const nextNum = maxInvoiceNo + 1;
         res.json({ nextInvoiceNo: nextNum });
     } catch (err) {
+        logError('GET /next-number', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -87,6 +103,7 @@ router.put('/:id', async (req, res) => {
         const updatedInvoice = await invoice.save();
         res.json(updatedInvoice);
     } catch (err) {
+        logError('PUT /:id', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -112,6 +129,7 @@ router.put('/:id/payment', async (req, res) => {
         const updatedInvoice = await invoice.save();
         res.json(updatedInvoice);
     } catch (err) {
+        logError('PUT /:id/payment', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -161,6 +179,7 @@ router.get('/customer-summary', async (req, res) => {
 
     } catch (err) {
         console.error("Error fetching customer summary:", err);
+        logError('GET /customer-summary', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -199,6 +218,7 @@ router.get('/all-summary', async (req, res) => {
 
     } catch (err) {
         console.error("Error fetching all summary:", err);
+        logError('GET /all-summary', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -211,6 +231,7 @@ router.get('/:id', async (req, res) => {
         if (!invoice) return res.status(404).json({ message: 'Invoice not found' });
         res.json(invoice);
     } catch (err) {
+        logError('GET /:id', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -228,6 +249,7 @@ router.delete('/:id', async (req, res) => {
         res.json({ message: 'Invoice deleted successfully' });
     } catch (err) {
         console.error(`Error deleting invoice ${req.params.id}:`, err);
+        logError(`DELETE /${req.params.id}`, err);
         res.status(500).json({ error: err.message });
     }
 });

@@ -1,6 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
+const fs = require('fs');
+const path = require('path');
+
+const logFile = path.join(__dirname, '../server_error.log');
+const logError = (context, err) => {
+    try {
+        const timestamp = new Date().toISOString();
+        const msg = `[${timestamp}] [PRODUCT] Error in ${context}: ${err.message}\nStack: ${err.stack}\n`;
+        fs.appendFileSync(logFile, msg);
+    } catch (e) {
+        // Fallback
+    }
+};
 
 // GET /products/fetch/:code - Find product by barcode or QR code
 router.get('/fetch/:code', async (req, res) => {
@@ -15,6 +28,7 @@ router.get('/fetch/:code', async (req, res) => {
         }
         res.json(product);
     } catch (err) {
+        logError('GET /fetch/:code', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -57,6 +71,7 @@ router.post('/', async (req, res) => {
         if (err.code === 11000) {
             return res.status(409).json({ message: "Product with this Barcode or QR Code already exists" });
         }
+        logError('POST /', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -67,6 +82,7 @@ router.get('/', async (req, res) => {
         const products = await Product.find().sort({ createdAt: -1 }); // Newest first
         res.json(products);
     } catch (err) {
+        logError('GET /', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -91,6 +107,7 @@ router.put('/:id', async (req, res) => {
         if (err.code === 11000) {
             return res.status(409).json({ message: "Barcode or QR Code already exists on another product" });
         }
+        logError('PUT /:id', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -107,6 +124,7 @@ router.delete('/:id', async (req, res) => {
 
         res.json({ message: "Product deleted successfully" });
     } catch (err) {
+        logError('DELETE /:id', err);
         res.status(500).json({ error: err.message });
     }
 });

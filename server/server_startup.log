@@ -1,0 +1,76 @@
+[2026-02-05T19:39:56.775Z] Server process started
+[2026-02-05T19:39:56.823Z] dotenv loaded
+[2026-02-05T19:39:57.190Z] express loaded
+[2026-02-05T19:39:58.246Z] mongoose loaded
+[2026-02-05T19:39:58.287Z] Attempting to connect to MongoDB at mongodb://127.0.0.1:27017/invoice-app
+[2026-02-05T19:39:58.395Z] MongoDB Connected successfully
+[2026-02-05T19:41:30.673Z] Server process started
+[2026-02-05T19:41:30.695Z] dotenv loaded
+[2026-02-05T19:41:30.936Z] express loaded
+[2026-02-05T19:41:31.534Z] mongoose loaded
+[2026-02-05T19:41:31.561Z] Attempting to connect to MongoDB at mongodb://127.0.0.1:27017/invoice-app
+[2026-02-05T19:41:31.620Z] Server running on port 5000
+[2026-02-05T19:41:31.641Z] MongoDB Connected successfully
+[2026-02-05T19:49:37.624Z] Server process started
+[2026-02-05T19:49:37.647Z] dotenv loaded
+[2026-02-05T19:49:37.944Z] express loaded
+[2026-02-05T19:49:38.708Z] mongoose loaded
+[2026-02-05T19:49:38.751Z] Attempting to connect to MongoDB at MONGODB_URI=mongodb+srv://db_user:@Piyush7737@cluster0.kwm2jzz.mongodb.net/?appName=Cluster0
+[2026-02-05T19:49:38.772Z] Server running on port 5000
+[2026-02-05T19:49:38.779Z] MongoDB Connection Error: Invalid scheme, expected connection string to start with "mongodb://" or "mongodb+srv://"
+[2026-02-05T19:52:21.900Z] Server process started
+[2026-02-05T19:52:21.923Z] dotenv loaded
+[2026-02-05T19:52:22.095Z] express loaded
+[2026-02-05T19:52:22.711Z] mongoose loaded
+[2026-02-05T19:52:22.766Z] Attempting to connect to MongoDB at mongodb+srv://db_user:%40Piyush7737@cluster0.kwm2jzz.mongodb.net/invoice-app?appName=Cluster0
+[2026-02-05T19:52:22.816Z] Server running on port 5000
+[2026-02-05T19:52:22.830Z] MongoDB Connection Error: querySrv ENOTFOUND _mongodb._tcp.cluster0.kwm2jzz.mongodb.net
+[2026-02-06T05:32:47.560Z] Server process started
+[2026-02-06T05:32:47.578Z] dotenv loaded
+[2026-02-06T05:32:47.800Z] express loaded
+[2026-02-06T05:32:48.399Z] mongoose loaded
+[2026-02-06T05:32:48.427Z] Attempting to connect to MongoDB at mongodb+srv://db_user:%40Piyush7737@cluster0.kwm2jzz.mongodb.net/invoice-app?appName=Cluster0
+[2026-02-06T05:32:48.458Z] Server running on port 5000
+[2026-02-06T05:32:48.474Z] MongoDB Connection Error: querySrv ENOTFOUND _mongodb._tcp.cluster0.kwm2jzz.mongodb.net
+[2026-02-06T05:35:03.865Z] Server process started
+[2026-02-06T05:35:03.882Z] dotenv loaded
+[2026-02-06T05:35:04.058Z] express loaded
+[2026-02-06T05:35:04.575Z] mongoose loaded
+[2026-02-06T05:35:04.603Z] Attempting to connect to MongoDB at mongodb+srv://db_user:%40Piyush7737@cluster0.kwm2jzz.mongodb.net/invoice-app?appName=Cluster0
+[2026-02-06T05:35:04.641Z] Server running on port 5000
+[2026-02-06T05:35:04.656Z] MongoDB Connection Error: querySrv ENOTFOUND _mongodb._tcp.cluster0.kwm2jzz.mongodb.net
+[2026-02-06T05:35:18.082Z] Server process started
+[2026-02-06T05:35:18.110Z] dotenv loaded
+[2026-02-06T05:35:18.298Z] express loaded
+[2026-02-06T05:35:18.719Z] mongoose loaded
+[2026-02-06T05:35:18.741Z] Attempting to connect to MongoDB at mongodb+srv://db_user:%40Piyush7737@cluster0.kwm2jzz.mongodb.net/invoice-app?appName=Cluster0
+[2026-02-06T05:35:18.766Z] Server running on port 5000
+[2026-02-06T05:35:18.785Z] MongoDB Connection Error: querySrv ENOTFOUND _mongodb._tcp.cluster0.kwm2jzz.mongodb.net
+[2026-02-06T05:36:58.552Z] Server process started
+[2026-02-06T05:36:58.570Z] dotenv loaded
+[2026-02-06T05:36:58.788Z] express loaded
+[2026-02-06T05:36:59.270Z] mongoose loaded
+[2026-02-06T05:36:59.294Z] Attempting to connect to MongoDB at mongodb+srv://db_user:%40Piyush7737@cluster0.kwm2jzz.mongodb.net/invoice-app?appName=Cluster0
+[2026-02-06T05:36:59.321Z] Server running on port 5000
+[2026-02-06T05:36:59.921Z] MongoDB Connection Error: bad auth : authentication failed
+[2026-02-06T05:47:36.029Z] Server process started
+[2026-02-06T05:47:36.047Z] dotenv loaded
+[2026-02-06T05:47:36.242Z] express loaded
+[2026-02-06T05:47:36.672Z] mongoose loaded
+[2026-02-06T05:47:36.698Z] Attempting to connect to MongoDB at mongodb+srv://invoice:Piyush7737@cluster0.kwm2jzz.mongodb.net/?appName=Cluster0
+[2026-02-06T05:47:36.729Z] Server running on port 5000
+[2026-02-06T05:47:37.315Z] MongoDB Connected successfully
+[2026-02-22T08:24:22.961Z] Server process started
+[2026-02-22T08:24:23.004Z] dotenv loaded
+[2026-02-22T08:24:26.500Z] express loaded
+[2026-02-22T08:24:35.379Z] mongoose loaded
+[2026-02-22T08:24:35.451Z] Attempting to connect to MongoDB at mongodb+srv://invoice:Piyush7737@cluster0.kwm2jzz.mongodb.net/?appName=Cluster0
+[2026-02-22T08:24:35.478Z] Server running on port 5000
+[2026-02-22T08:24:36.552Z] MongoDB Connected successfully
+[2026-02-22T08:25:07.642Z] Server process started
+[2026-02-22T08:25:07.664Z] dotenv loaded
+[2026-02-22T08:25:07.838Z] express loaded
+[2026-02-22T08:25:08.390Z] mongoose loaded
+[2026-02-22T08:25:08.415Z] Attempting to connect to MongoDB at mongodb+srv://invoice:Piyush7737@cluster0.kwm2jzz.mongodb.net/?appName=Cluster0
+[2026-02-22T08:25:08.438Z] Server running on port 5000
+[2026-02-22T08:25:08.904Z] MongoDB Connected successfully
